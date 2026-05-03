@@ -1,0 +1,11 @@
+<mat-list>
+  @for (task of tasks; track task) {
+    <mat-list-item>
+      <mat-checkbox
+        [checked]="task.completionStatus === TaskStatus.COMPLETED"
+        (change)="toggleTaskCompletion(task, $event.checked)"
+        >{{ task.title }}
+      </mat-checkbox>
+    </mat-list-item>
+  }
+</mat-list>
