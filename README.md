@@ -6,8 +6,8 @@ This is a work in progress.
 
 I am using Figma to mock up my components and refining my tasks in a very relaxed way through a Kanban board:
 
-<img width="1006" height="416" alt="image" src="https://github.com/user-attachments/assets/a859a77d-34a2-4f8e-a3be-15834b046055" />
+<img width="3521" height="1456" alt="kanban" src="https://github.com/user-attachments/assets/e84d018e-2143-4289-a55e-348b41059ae8" />
 
 This is what the first draft of the application is currently supposed to look like:
 
-<img width="1948" height="2022" alt="image" src="https://github.com/user-attachments/assets/1f8ba7d6-085b-4429-ac7b-fea4b1f6d0b9" />
+<img width="1948" height="2022" alt="mockup" src="https://github.com/user-attachments/assets/1f8ba7d6-085b-4429-ac7b-fea4b1f6d0b9" />
