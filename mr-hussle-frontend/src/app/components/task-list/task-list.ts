@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -13,6 +13,7 @@ import { of } from 'rxjs';
   selector: 'app-task-list',
   imports: [MatSlideToggleModule, MatListModule, MatCheckboxModule],
   templateUrl: './task-list.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './task-list.css',
 })
 export class TaskList implements OnInit {
