@@ -1,11 +1,54 @@
+<!--
+  Reading a signal in the template (e.g. `tasks.isLoading()`) makes this view depend on it.
+  When that signal changes, Angular re-renders just this component. No manual refresh needed.
+-->
+@if (tasks.isLoading()) {
+  <p>Loading tasks…</p>
+} @else if (tasks.error()) {
+  <p>Could not load tasks.</p>
+}
+
 <mat-list>
-  @for (task of tasks; track task) {
-    <mat-list-item>
-      <mat-checkbox
-        [checked]="task.completionStatus === TaskStatus.COMPLETED"
-        (change)="toggleTaskCompletion(task, $event.checked)"
-        >{{ task.title }}
-      </mat-checkbox>
-    </mat-list-item>
+  @for (task of tasks.value() ?? []; track task.id) {
+    @if (editingTask()?.id === task.id) {
+      <div class="task-row editing">
+        <!-- `[formField]` two-way binds an input to a field of the signal form (and its model signal). -->
+        <mat-form-field class="title-field" subscriptSizing="dynamic">
+          <mat-label>Title</mat-label>
+          <input matInput [formField]="taskForm.title" />
+        </mat-form-field>
+
+        <mat-form-field class="coins-field" subscriptSizing="dynamic">
+          <mat-label>Coins</mat-label>
+          <input matInput type="number" [formField]="taskForm.coins" />
+        </mat-form-field>
+
+        <div class="actions">
+          <button matButton (click)="cancelEdit()">Cancel</button>
+          <button matButton="filled" [disabled]="taskForm().invalid()" (click)="saveTask()">
+            Save
+          </button>
+        </div>
+      </div>
+    } @else {
+      <mat-list-item>
+        <div class="task-row">
+          <mat-checkbox
+            [checked]="task.completionStatus === TaskStatus.COMPLETED"
+            (change)="toggleTaskCompletion(task, $event.checked)"
+          >
+            {{ task.title }}
+          </mat-checkbox>
+          <button
+            matIconButton
+            aria-label="Edit task"
+            [disabled]="isEditing()"
+            (click)="editTask(task)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+    }
   }
 </mat-list>
