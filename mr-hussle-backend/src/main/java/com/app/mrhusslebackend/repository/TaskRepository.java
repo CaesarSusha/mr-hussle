@@ -11,7 +11,7 @@ import com.app.mrhusslebackend.model.enums.TaskStatus;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, UUID> {
-    List<Task> findByCoins(Integer coins);
+    List<Task> findByValue(Integer value);
 
     List<Task> findByTitleContaining(String title);
 

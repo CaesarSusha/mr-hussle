@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.mrhusslebackend.model.entities.Task;
+import com.app.mrhusslebackend.model.enums.TaskCategory;
 import com.app.mrhusslebackend.model.enums.TaskStatus;
 import com.app.mrhusslebackend.repository.TaskRepository;
+
+import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -46,18 +49,27 @@ public class TaskController {
 	}
 
 	@PostMapping("/tasks")
-	public ResponseEntity<Task> createTask(@RequestBody Task task) {
-		taskRepository.save(task);
-		return ResponseEntity.status(HttpStatus.CREATED).body(task);
+	public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) {
+		// New tasks always start as IN_PROGRESS; one-time is the default category.
+		task.setCompletionStatus(TaskStatus.IN_PROGRESS);
+		if (task.getCategory() == null) {
+			task.setCategory(TaskCategory.ONE_TIME);
+		}
+		Task savedTask = taskRepository.save(task);
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedTask);
 	}
 
 	@PutMapping("/tasks/{id}")
-	public ResponseEntity<Task> updateTask(@PathVariable() UUID id, @RequestBody Task task) {
+	public ResponseEntity<Task> updateTask(@PathVariable() UUID id, @Valid @RequestBody Task task) {
 		Optional<Task> existingTask = taskRepository.findById(id);
 		if (existingTask.isPresent()) {
 			Task updatedTask = existingTask.get();
 			updatedTask.setTitle(task.getTitle());
-			updatedTask.setCoins(task.getCoins());
+			updatedTask.setValue(task.getValue());
+			updatedTask.setDueDate(task.getDueDate());
+			updatedTask.setPriority(task.getPriority());
+			// Tasks created before categories existed send null; treat them as one-time.
+			updatedTask.setCategory(task.getCategory() != null ? task.getCategory() : TaskCategory.ONE_TIME);
 			updatedTask.setCompletionStatus(task.getCompletionStatus());
 			taskRepository.save(updatedTask);
 			return ResponseEntity.ok(updatedTask);

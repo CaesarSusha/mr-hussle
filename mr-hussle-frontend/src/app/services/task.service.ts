@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { TaskStatus } from '../enums/task-status.enum';
 import { Task } from '../models/task.model';
 
 const baseUrl = 'http://localhost:2121/api/tasks';
@@ -22,7 +23,7 @@ export class TaskService {
     return this.http.get<Task>(`${baseUrl}/${id}`);
   }
 
-  createTask(data: Task): Observable<Task> {
+  createTask(data: Omit<Task, 'id'>): Observable<Task> {
     return this.http.post<Task>(baseUrl, data);
   }
 
@@ -38,7 +39,7 @@ export class TaskService {
     return this.http.delete(baseUrl);
   }
 
-  findTaskByCompletionStatus(completionStatus: string): Observable<Task[]> {
-    return this.http.get<Task[]>(`${baseUrl}?completionStatus=${completionStatus}`);
+  findTaskByCompletionStatus(completionStatus: TaskStatus): Observable<Task[]> {
+    return this.http.get<Task[]>(`${baseUrl}/status/${completionStatus}`);
   }
 }
