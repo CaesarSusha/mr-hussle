@@ -1,0 +1,12 @@
+<app-task-list></app-task-list>
+@if (!taskList().isEditing()) {
+  <button
+    matButton="tonal"
+    class="add-task"
+    aria-label="Add task"
+    matTooltip="Add task"
+    (click)="taskList().addTask()"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+}

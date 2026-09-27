@@ -1,0 +1,74 @@
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Each task is a rounded "card" row */
+.task-item {
+  background: var(--mat-sys-surface-container-low);
+  border-radius: var(--mat-sys-corner-large);
+  margin-bottom: 8px;
+}
+
+/* Priority and coins: icon + number, each in its own color (tokens in material-theme.scss). */
+.stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 48px;
+  font: var(--mat-sys-label-large);
+}
+
+.stat mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  /* Material Symbols is a variable font: FILL 1 switches to the filled icon style. */
+  font-variation-settings: 'FILL' 1;
+}
+
+.stat.priority {
+  color: var(--app-priority-color);
+}
+
+.stat.value {
+  color: var(--app-value-color);
+}
+
+.task-row mat-checkbox {
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+  The edit row is not inside a <mat-list-item>, so it gets the same 16px side padding itself.
+  `border-box` counts that padding inside `width: 100%` (by default it would be added on top
+  and make the row wider than the list). Together, the check/close buttons land exactly where
+  the edit/note buttons of the other rows are.
+*/
+.task-row.editing {
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+}
+
+.title-field {
+  flex: 1 1 200px;
+}
+
+.date-field {
+  flex: 0 1 170px;
+}
+
+.number-field {
+  flex: 0 1 110px;
+}
+
+/* Same 12px gap as between the note and edit buttons in `.task-row`. */
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-left: auto;
+}

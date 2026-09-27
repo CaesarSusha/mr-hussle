@@ -1,0 +1,19 @@
+/*
+  Material buttons are customised through their CSS variables ("tokens") instead of overriding
+  their internal classes. Tonal = the light "container" color of the theme
+*/
+.add-task {
+  display: flex;
+  width: calc(100% - 32px);
+  margin: 8px 16px 0;
+  /*
+    Low-opacity dashed outline: `color-mix()` blends the theme's primary color with
+    transparent, i.e. primary at 40% opacity.
+  */
+  border: 1px dashed color-mix(in srgb, var(--mat-sys-primary) 40%, transparent);
+  --mat-button-tonal-container-height: 32px;
+  --mat-button-tonal-container-shape: var(--mat-sys-corner-small);
+  /* No label next to the icon, so remove the space Material reserves between icon and text. */
+  --mat-button-tonal-icon-spacing: 0;
+  --mat-button-tonal-icon-offset: 0;
+}

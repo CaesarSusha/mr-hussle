@@ -1,11 +1,107 @@
+<!--
+  Reading a signal in the template (e.g. `tasks.isLoading()`) makes this view depend on it.
+  When that signal changes, Angular re-renders just this component. No manual refresh needed.
+-->
+@if (tasks.isLoading()) {
+  <p>Loading tasks…</p>
+} @else if (tasks.error()) {
+  <p>Could not load tasks.</p>
+}
+
 <mat-list>
-  @for (task of tasks; track task) {
-    <mat-list-item>
-      <mat-checkbox
-        [checked]="task.completionStatus === TaskStatus.COMPLETED"
-        (change)="toggleTaskCompletion(task, $event.checked)"
-        >{{ task.title }}
-      </mat-checkbox>
-    </mat-list-item>
+  @for (task of tasks.value() ?? []; track task.id) {
+    @if (editingTaskId() === task.id) {
+      <ng-container [ngTemplateOutlet]="editRow" />
+    } @else {
+      <mat-list-item class="task-item">
+        <div class="task-row">
+          <mat-checkbox
+            [checked]="task.completionStatus === TaskStatus.COMPLETED"
+            (change)="toggleTaskCompletion(task, $event.checked)"
+          >
+            {{ task.title }}
+          </mat-checkbox>
+          <span class="stat priority" matTooltip="Priority">
+            <mat-icon aria-hidden="true">weight</mat-icon>
+            <span class="cdk-visually-hidden">Priority</span>
+            {{ task.priority }}
+          </span>
+          <span class="stat value" matTooltip="Coins">
+            <mat-icon aria-hidden="true">poker_chip</mat-icon>
+            <span class="cdk-visually-hidden">Coins</span>
+            {{ task.value }}
+          </span>
+          <!-- Notes are not implemented yet; the button is a placeholder. -->
+          <button
+            matIconButton
+            aria-label="Add note"
+            matTooltip="Add note"
+            [disabled]="isEditing()"
+          >
+            <mat-icon>note_stack</mat-icon>
+          </button>
+          <button
+            matIconButton
+            aria-label="Edit task"
+            [disabled]="isEditing()"
+            (click)="editTask(task)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+    }
+  }
+
+  <!-- The draft for a new task only exists in the form model until it is saved. -->
+  @if (isCreating()) {
+    <ng-container [ngTemplateOutlet]="editRow" />
   }
 </mat-list>
+
+<!--
+  One edit row, shared by "edit existing task" and "add new task". `ng-template` is not
+  rendered by itself; `ngTemplateOutlet` stamps it out wherever it is needed.
+-->
+<ng-template #editRow>
+  <div class="task-item task-row editing">
+    <!-- `[formField]` two-way binds an input to a field of the signal form (and its model signal). -->
+    <mat-form-field class="title-field" subscriptSizing="dynamic">
+      <mat-label>Title</mat-label>
+      <input matInput [formField]="taskForm.title" />
+    </mat-form-field>
+
+    <!-- `[matDatepicker]` connects the input to the popup below; the toggle button opens it. -->
+    <mat-form-field class="date-field" subscriptSizing="dynamic">
+      <mat-label>Due date</mat-label>
+      <input matInput [matDatepicker]="dueDatePicker" [formField]="taskForm.dueDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="dueDatePicker" />
+      <mat-datepicker #dueDatePicker />
+    </mat-form-field>
+
+    <mat-form-field class="number-field" subscriptSizing="dynamic">
+      <mat-label>Priority</mat-label>
+      <input matInput type="number" step="1" [formField]="taskForm.priority" />
+    </mat-form-field>
+
+    <mat-form-field class="number-field" subscriptSizing="dynamic">
+      <mat-label>Coins</mat-label>
+      <input matInput type="number" step="1" [formField]="taskForm.value" />
+    </mat-form-field>
+
+    <div class="actions">
+      <button matIconButton aria-label="Cancel" matTooltip="Cancel" (click)="cancelEdit()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <button
+        matIconButton
+        aria-label="Save"
+        matTooltip="Save"
+        [disabled]="taskForm().invalid()"
+        (click)="saveTask()"
+      >
+        <mat-icon>check</mat-icon>
+      </button>
+    </div>
+  </div>
+</ng-template>
