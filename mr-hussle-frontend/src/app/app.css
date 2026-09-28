@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.shell {
+  display: flex;
+  height: 100%;
+}
+
+.content {
+  /* Take all remaining width; `min-width: 0` lets it shrink below its content's size. */
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+}
