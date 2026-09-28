@@ -1,0 +1,58 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  /* Never let the flex layout squeeze the sidebar; its width is only set by the rules below. */
+  flex: none;
+  width: 240px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 8px 0;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  /* Clip the labels while the sidebar shrinks, instead of letting them wrap or overflow. */
+  overflow: hidden;
+  /* Animate the width change; this curve is Material 3's "emphasized" easing. */
+  transition: width 250ms cubic-bezier(0.2, 0, 0, 1);
+
+  /* Bigger, roomier list items than Material's default, like in the design. */
+  --mat-list-list-item-one-line-container-height: 64px;
+  --mat-list-list-item-label-text-size: var(--mat-sys-title-large-size);
+  --mat-list-list-item-label-text-line-height: var(--mat-sys-title-large-line-height);
+  --mat-list-list-item-label-text-weight: var(--mat-sys-title-large-weight);
+  --mat-list-list-item-leading-icon-color: var(--mat-sys-primary);
+  --mat-list-list-item-hover-leading-icon-color: var(--mat-sys-primary);
+  --mat-list-list-item-leading-icon-size: 28px;
+  /* Rectangular hover/focus highlight instead of Material 3's pill shape. */
+  --mat-list-active-indicator-shape: var(--mat-sys-corner-none);
+  --mat-list-list-item-container-shape: var(--mat-sys-corner-none);
+}
+
+/* Icons-only width: 16px padding + 28px icon + 16px padding, plus a little breathing room. */
+:host(.collapsed) {
+  width: 76px;
+}
+
+/* Respect the OS "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    transition: none;
+  }
+}
+
+.toggle {
+  flex: none;
+  margin: 0 0 8px 14px;
+}
+
+/*
+  The list items are native <button>s, so undo the browser's button defaults:
+  the border, and the centered text (labels should be left-aligned like a normal list).
+*/
+button[mat-list-item] {
+  border: none;
+  text-align: start;
+}
+
+/* Keep labels on one line so they get clipped (not wrapped) during the collapse animation. */
+[matListItemTitle] {
+  white-space: nowrap;
+}

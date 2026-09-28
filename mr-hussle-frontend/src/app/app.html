@@ -1,1 +1,10 @@
-<router-outlet />
+<!--
+  Plain flex layout: the sidebar has its own (animated) width and the main area takes whatever
+  is left, so collapsing the sidebar hands its space back to the page.
+-->
+<div class="shell">
+  <app-sidebar />
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

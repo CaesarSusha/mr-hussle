@@ -1,0 +1,27 @@
+<button
+  matIconButton
+  class="toggle"
+  [attr.aria-label]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+  [attr.aria-expanded]="!collapsed()"
+  (click)="toggle()"
+>
+  <mat-icon>{{ collapsed() ? 'left_panel_open' : 'left_panel_close' }}</mat-icon>
+</button>
+
+<mat-nav-list>
+  @for (item of items; track item.label) {
+    <!--
+      The label is always rendered: when collapsed, the narrow sidebar just clips it away
+      (which is what makes the shrink animation look smooth). The tooltip shows it instead.
+    -->
+    <button
+      mat-list-item
+      [matTooltip]="item.label"
+      matTooltipPosition="right"
+      [matTooltipDisabled]="!collapsed()"
+    >
+      <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+      <span matListItemTitle>{{ item.label }}</span>
+    </button>
+  }
+</mat-nav-list>
